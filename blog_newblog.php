@@ -1,0 +1,196 @@
+<?php
+session_start();
+
+$error="";
+
+if(!isset($_SESSION['username'])){
+    
+     header("Location: index.php");
+    
+}
+
+$link = mysqli_connect("localhost","root","","blog");
+        
+         if(mysqli_connect_error()){
+           
+             die("Database connection error");
+             
+         }
+         
+        
+
+
+    if(isset($_POST['logout'])){
+        
+        header("Location: index.php");
+        
+    }
+    
+    if(isset($_POST['save'])){
+        
+        if($_POST['title']==""){
+            
+            $error.= "Please enter a Title.<br>";
+            
+        } 
+        
+        if($_POST['blog']==""){
+            
+            $error.= "Please enter some text in your blog.<br>";
+            
+        }
+        
+        else{
+            
+            $username=$_SESSION['username'];
+            $title=$_POST['title'];
+            $text=$_POST['blog'];
+            $status="save";
+            
+            $query="INSERT INTO `newblog`(`username` , `title` , `text` , `status`) VALUES ('$username' , '$title' , '$text' , '$status')";
+            $result = mysqli_query($link,$query);
+            
+        }
+        
+    }
+    
+    if(isset($_POST['savepost'])){
+        
+        if($_POST['title']==""){
+            
+            $error.= "Please enter a title.<br>";
+            
+        } 
+        
+        if($_POST['blog']==""){
+            
+            $error.= "Please enter text.<br>";
+            
+        }
+        
+        else{
+            
+            $username=$_SESSION['username'];
+            $title=$_POST['title'];
+            $text=$_POST['blog'];
+            $status="savepost";
+            
+            $query="INSERT INTO `newblog`(`username` , `title` , `text` , `status`) VALUES ('$username' , '$title' , '$text' , '$status')";
+            $result = mysqli_query($link,$query);
+            
+        }
+    }
+    
+?>
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+ <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet"> 
+    <title>New Blog</title>
+    
+    <style>
+    
+    html{
+        background-color:#c62828;
+    }
+    
+    body{
+        
+        background:none;
+    }
+        
+    .sidenav {
+              margin-top:120px;
+              height: 100%; /* Full-height: remove this if you want "auto" height */
+              width: 18%; /* Set the width of the sidebar */
+              position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+              z-index: 1; /* Stay on top */
+              top: 0; /* Stay at the top */
+              left: 0;
+              background-color: #111; /* Black */
+              overflow-x: hidden; /* Disable horizontal scroll */
+              padding-top: 20px;
+}
+
+/* The navigation menu links */
+.sidenav a {
+              
+              color: #818181;
+            
+        }
+
+/* When you mouse over the navigation links, change their color */
+        .sidenav a:hover {
+              color: #f1f1f1;
+        }
+        
+        .newblog{
+            
+            margin-left: 20%;
+            margin-top:40px;
+            width:80%;
+            
+        }
+        
+        
+    </style>
+    
+  </head>
+  <body>
+      
+    <form method="post">
+      
+    <div class="logout">
+        
+        <p style="background-color: #8e0000; font-family: 'Pacifico', cursive; font-size: 80px; display: flex;justify-content: center; color: white;"> New Blog </p>
+        
+    </div>
+      
+    <div class="sidenav container">
+    <a href="blog_myaccount.php">My Account</a>
+        <br>
+        <a href="blog_homepage.php">Homepage</a> 
+        <br>
+        <a href="blog_newblog.php">New Blog</a> 
+        <br>
+        <a href="blog_allblogs.php">All Blogs</a> 
+        <br>
+        <a href="index.php">Log Out</a>
+    </div>
+    
+    <div class=" container newblog" name="newblog">
+        
+         <div class="form-group">
+    <div><?php echo $error; ?></div>
+    <input type="text" class="form-control" id="exampleFormControlInput1" name="title" placeholder="Title">
+  </div>
+   <div class="form-group">
+    <textarea class="form-control" id="exampleFormControlTextarea1" name="blog" rows="10" placeholder="What's on your mind today?"></textarea>
+  </div>
+ 
+
+
+  <button type="submit" class="btn "  style="background-color:#8e0000; color: white;" name="savepost">Post</button>
+        
+    </div>
+    
+    </form>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   <script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+</html>
